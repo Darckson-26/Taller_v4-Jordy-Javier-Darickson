@@ -8,14 +8,31 @@ int main () {
     char catalogo [productos][20], buscarProducto [20], productoCaro [20], productoBarato [20];
     float precio [productos];
 //Declaracion de contadores y acumuladores
-    int i, totalIngresados;
+    int i, totalIngresados = 0;
     float costoTotal = 0, costopromedio = 0;
 //Declaracion de variables comparativas
     float precioMax = 0, precioMin;
 //Declaracion de variables de control
     int opc, opc2, opc3, opc4;
-    //Bucle para ingreso de catalogo y precios
-        for (i = 0; i < productos; i++) {
+    //Bucle para iterar menu segun necesite el usuario
+    do{
+        printf("\n1.Ingresar productos");
+        printf("\n2.Precio Total");
+        printf("\n3.Producto mas caro y mas barato");
+        printf("\n4.Precio Promedio");
+        printf("\n5.Buscar precio del producto");
+        printf("\n6.Salir");
+        printf("\n>>");
+        //Funcion de control para ingresar y desplegar solo informacion solicitada
+        scanf("%d", &opc2);
+        switch (opc2) {
+            case 1:
+            if (totalIngresados == productos) {
+        printf("\nEl inventario esta lleno.\n");
+        break;
+        }                
+        //Bucle para ingreso de catalogo y precios
+        for (i = totalIngresados; i < productos; i++) {
             printf("Ingrese nombre del producto: ");
             scanf("%s", &catalogo[i]);
             printf("Ingrese el precio del producto: ");
@@ -66,59 +83,67 @@ int main () {
         break;
     }
     }
-
         /*Calculo de costo promedio usando el acumulador
         costoTotal y el contador totalIngresados*/
         costopromedio = costoTotal/totalIngresados;
+        break;
     
-    //Bucle para iterar menu segun necesite el usuario
-    do{
-        printf("\nSeleccione una opcion");
-        printf("\n1.Precio Total");
-        printf("\n2.Producto mas caro");
-        printf("\n3.Producto mas barato");
-        printf("\n4.Precio Promedio");
-        printf("\n5.Buscar precio del producto");
-        printf("\n6.Salir");
-        printf("\n>>");
-    //Funcion de control para ingresar y desplegar solo informacion solicitada
-        scanf("%d", &opc2);
-        switch (opc2) {
-            case 1:
+            case 2:
+            //Cada caso remite a ingresar productos si no hay productos
+                if ( totalIngresados == 0) {
+                    printf("\nAun no hay productos registrados. Use la opcion 1 primero.\n");
+                    break;
+                }
                 printf("El precio total del inventario es: %.2f", costoTotal);
                 break;
-            
-            case 2:
-                printf("El producto mas caro es %s : (%.2f)", productoCaro, precioMax);
-                break;
-            
+
             case 3:
-                printf("El producto mas barato es %s : (%.2f)", productoBarato, precioMin);
+                if ( totalIngresados == 0) {
+                    printf("\nAun no hay productos registrados. Use la opcion 1 primero.\n");
+                    break;
+                }
+                printf("El producto mas caro es %s : (%.2f)", productoCaro, precioMax);
+                printf("\nEl producto mas barato es %s : (%.2f)", productoBarato, precioMin);
                 break;
 
             case 4:
+                if ( totalIngresados == 0) {
+                    printf("\nAun no hay productos registrados. Use la opcion 1 primero.\n");
+                    break;
+                }
                 printf("El precio promedio de todos los productos es: %.2f", costopromedio);
                 break;
             
             case 5:
+                if ( totalIngresados == 0) {
+                printf("\nAun no hay productos registrados. Use la opcion 1 primero.\n");
+                break;
+                }
                 /*Funcion bucle do-while para buscar el precio de los productos por su nombre
                 cuantas veces el usuario dese*/
-                do{
-                    printf("Ingrese nombre del producto: ");
+                do {
+                    printf("\nIngrese nombre del producto: ");
                     scanf("%s", buscarProducto);
+                    int encontrado = 0;
                     //Bucle for permite buscar en cada valor del indice
-                    for (i = 0; i < productos; i++) {
+                    for (i = 0; i < totalIngresados; i++) {
                         /*Sentencia comparativa, igualdad cero representa
                         cadena de caracteres identicas, y se rompe bucle
                         mostrando el producto buscado, sino, no muestra nada*/
                         if (strcmp(buscarProducto, catalogo[i]) == 0) {
-                            printf("El precio del producto es: %.2f", precio[i]);
+                            printf("-> El precio de [%s] es: %.2f\n", catalogo[i], precio[i]);
+                            encontrado = 1;
                             break;
                         }
                     }
-                    printf("\nDesea ingresar de nuevo un producto? 1.Si 2.No >");
+                    //Por el producto esta mal escrito
+                    if (!encontrado) {
+                        printf("-> Error: El producto no existe o esta mal escrito.\n");
+                    }
+
+                    printf("\n¿Desea buscar otro producto? 1.Si 2.No > ");
                     scanf("%d", &opc3);
-                } while(opc3 == 1);
+                } while (opc3 == 1);
                 break;
             
             case 6:
